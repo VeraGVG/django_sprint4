@@ -74,7 +74,8 @@ class PostCreateView(PostsEditMixin, LoginRequiredMixin, CreateView):
 
     def get_success_url(self) -> str:
         """
-        Возвращает URL профиля автора после успешного создания публикации.
+        Возвращает URL профиля автора после
+        успешного создания публикации.
         """
         return reverse('blog:profile', args=[self.request.user.username])
 
@@ -87,7 +88,7 @@ class CommentCreateView(CommentEditMixin, LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         """
-        Устанавливает текущего пользователя как автора комментария 
+        Устанавливает текущего пользователя как автора комментария
         и связывает комментарий с публикацией.
         """
         form.instance.post = get_object_or_404(Post, pk=self.kwargs['post_id'])
@@ -107,7 +108,6 @@ class CommentDeleteView(CommentEditMixin, LoginRequiredMixin, DeleteView):
 
     def delete(self, request, *args, **kwargs):
         """Проверяет права на удаление комментария."""
-    
         comment = get_object_or_404(Comment, pk=self.kwargs[self.pk_url_kwarg])
         if self.request.user != comment.author:
             return redirect('blog:post_detail', post_id=self.kwargs['post_id'])
@@ -126,9 +126,7 @@ class CommentUpdateView(CommentEditMixin, LoginRequiredMixin, UpdateView):
     pk_url_kwarg = 'comment_id'
 
     def dispatch(self, request, *args, **kwargs):
-        """
-        Проверяет права на редактирование комментария.
-        """
+        """Проверяет права на редактирование комментария."""
         comment = get_object_or_404(Comment, pk=self.kwargs[self.pk_url_kwarg])
         if self.request.user != comment.author:
             return redirect('blog:post_detail', post_id=self.kwargs['post_id'])
@@ -165,7 +163,10 @@ class AuthorProfileListView(ListView):
 
 
 class BlogIndexListView(ListView):
-    """Представление для главной страницы блога с опубликованными публикациями."""
+    """
+    Представление для главной страницы 
+    блога с опубликованными публикациями.
+    """
 
     model = Post
     template_name = 'blog/index.html'
