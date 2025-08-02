@@ -64,7 +64,6 @@ def post_detail(request, id):
 
 def category_posts(request, slug):
     """Отображение списка постов с заданной категорией"""
-
     template = 'blog/category.html'
     category = get_object_or_404(Category.objects.values(
         'title',
@@ -292,4 +291,3 @@ def delete_comment(request, post_id, comment_id):
         instance.delete()
         return redirect('blog:post_detail', id=post_id)
     return render(request, 'blog/comment.html', context)
-
