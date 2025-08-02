@@ -164,7 +164,7 @@ class AuthorProfileListView(ListView):
 
 class BlogIndexListView(ListView):
     """
-    Представление для главной страницы 
+    Представление для главной страницы
     блога с опубликованными публикациями.
     """
 
