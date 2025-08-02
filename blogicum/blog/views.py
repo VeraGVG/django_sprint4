@@ -23,6 +23,7 @@ class PostDeleteView(PostsEditMixin, LoginRequiredMixin, DeleteView):
 
     Пользователь может удалить только свои публикации.
     """
+
     model = Post
     success_url = reverse_lazy('blog:index')
     pk_url_kwarg = 'post_id'
@@ -31,6 +32,7 @@ class PostDeleteView(PostsEditMixin, LoginRequiredMixin, DeleteView):
         """
         Проверяет права на удаление публикации.
         """
+    
         post = get_object_or_404(Post, pk=self.kwargs[self.pk_url_kwarg])
         if self.request.user != post.author:
             return redirect('blog:index')
@@ -43,6 +45,7 @@ class PostUpdateView(PostsEditMixin, LoginRequiredMixin, UpdateView):
 
     Пользователь может редактировать только свои публикации.
     """
+
     form_class = CreatePostForm
     model = Post
     pk_url_kwarg = 'post_id'
