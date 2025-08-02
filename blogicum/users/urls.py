@@ -6,6 +6,7 @@ urlpatterns = [
 
     path('profile/<slug:username>/', ProfileView.as_view(), name='profile'),
 
-    path('profile/edit/', ProfileEditView.as_view(), name='profile_edit'),
+    path('profile/edit/', ProfileEditView.as_view(), name='edit_profile'),
 
 ]
+
