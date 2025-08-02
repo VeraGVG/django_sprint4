@@ -9,4 +9,3 @@ urlpatterns = [
     path('profile/edit/', ProfileEditView.as_view(), name='edit_profile'),
 
 ]
-
