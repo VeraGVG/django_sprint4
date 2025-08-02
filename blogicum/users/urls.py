@@ -10,4 +10,3 @@ urlpatterns = [
          ProfileEditView.as_view(), name='edit_profile'),
 
 ]
-
