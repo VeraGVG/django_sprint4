@@ -29,11 +29,7 @@ class PostDeleteView(PostsEditMixin, LoginRequiredMixin, DeleteView):
     pk_url_kwarg = 'post_id'
 
     def delete(self, request, *args, **kwargs):
-
-        """
-        Проверяет права на удаление публикации.
-        """
-    
+        """Проверяет права на удаление публикации."""
         post = get_object_or_404(Post, pk=self.kwargs[self.pk_url_kwarg])
         if self.request.user != post.author:
             return redirect('blog:index')
