@@ -48,10 +48,7 @@ class PostUpdateView(PostsEditMixin, LoginRequiredMixin, UpdateView):
     pk_url_kwarg = 'post_id'
 
     def dispatch(self, request, *args, **kwargs):
-        """
-        Проверяет права на редактирование публикации.
-        """
-    
+        """Проверяет права на редактирование публикации."""
         post = get_object_or_404(Post, pk=self.kwargs[self.pk_url_kwarg])
         if self.request.user != post.author:
             return redirect('blog:post_detail',
@@ -59,18 +56,13 @@ class PostUpdateView(PostsEditMixin, LoginRequiredMixin, UpdateView):
         return super().dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
-        """
-        Возвращает URL для просмотра редактируемой публикации.
-        """
-    
+        """Возвращает URL для просмотра редактируемой публикации."""
         return reverse('blog:post_detail',
                        args=[self.kwargs[self.pk_url_kwarg]])
 
 
 class PostCreateView(PostsEditMixin, LoginRequiredMixin, CreateView):
-    """
-    Представление для создания новой публикации.
-    """
+    """Представление для создания новой публикации."""
 
     model = Post
     form_class = CreatePostForm
