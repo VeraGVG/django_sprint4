@@ -23,6 +23,7 @@ class PostDeleteView(PostsEditMixin, LoginRequiredMixin, DeleteView):
 
     Пользователь может удалить только свои публикации.
     """
+    
     model = Post
     success_url = reverse_lazy('blog:index')
     pk_url_kwarg = 'post_id'
@@ -43,6 +44,7 @@ class PostUpdateView(PostsEditMixin, LoginRequiredMixin, UpdateView):
 
     Пользователь может редактировать только свои публикации.
     """
+    
     form_class = CreatePostForm
     model = Post
     pk_url_kwarg = 'post_id'
@@ -61,6 +63,7 @@ class PostUpdateView(PostsEditMixin, LoginRequiredMixin, UpdateView):
         """
         Возвращает URL для просмотра редактируемой публикации.
         """
+        
         return reverse('blog:post_detail',
                        args=[self.kwargs[self.pk_url_kwarg]])
 
@@ -69,6 +72,7 @@ class PostCreateView(PostsEditMixin, LoginRequiredMixin, CreateView):
     """
     Представление для создания новой публикации.
     """
+    
     model = Post
     form_class = CreatePostForm
 
@@ -76,6 +80,7 @@ class PostCreateView(PostsEditMixin, LoginRequiredMixin, CreateView):
         """
         Устанавливает текущего пользователя как автора публикации.
         """
+        
         form.instance.author = self.request.user
         return super().form_valid(form)
 
@@ -83,6 +88,7 @@ class PostCreateView(PostsEditMixin, LoginRequiredMixin, CreateView):
         """
         Возвращает URL профиля автора после успешного создания публикации.
         """
+        
         return reverse('blog:profile', args=[self.request.user.username])
 
 
@@ -90,6 +96,7 @@ class CommentCreateView(CommentEditMixin, LoginRequiredMixin, CreateView):
     """
     Представление для добавления комментария к публикации.
     """
+    
     model = Comment
     form_class = CreateCommentForm
 
@@ -98,6 +105,7 @@ class CommentCreateView(CommentEditMixin, LoginRequiredMixin, CreateView):
         Устанавливает текущего пользователя как автора комментария 
         и связывает комментарий с публикацией.
         """
+        
         form.instance.post = get_object_or_404(Post, pk=self.kwargs['post_id'])
         form.instance.author = self.request.user
         return super().form_valid(form)
@@ -109,6 +117,7 @@ class CommentDeleteView(CommentEditMixin, LoginRequiredMixin, DeleteView):
 
     Пользователь может удалять только свои комментарии.
     """
+    
     model = Comment
     pk_url_kwarg = 'comment_id'
 
@@ -136,6 +145,7 @@ class CommentUpdateView(CommentEditMixin, LoginRequiredMixin, UpdateView):
         """
         Проверяет права на редактирование комментария.
         """
+        
         comment = get_object_or_404(Comment, pk=self.kwargs[self.pk_url_kwarg])
         if self.request.user != comment.author:
             return redirect('blog:post_detail', post_id=self.kwargs['post_id'])
@@ -149,6 +159,7 @@ class AuthorProfileListView(ListView):
     Публикации авторизованного пользователя отображаются полностью,
     остальные — только опубликованные.
     """
+    
     model = Post
     template_name = 'blog/profile.html'
     paginate_by = PAGINATED_BY
@@ -178,6 +189,7 @@ class BlogIndexListView(ListView):
     """
     Представление для главной страницы блога с опубликованными публикациями.
     """
+    
     model = Post
     template_name = 'blog/index.html'
     context_object_name = 'post_list'
@@ -190,6 +202,7 @@ class BlogCategoryListView(ListView):
     """
     Представление для отображения публикаций определённой категории.
     """
+    
     model = Post
     template_name = 'blog/category.html'
     context_object_name = 'post_list'
@@ -199,6 +212,7 @@ class BlogCategoryListView(ListView):
         """
         Возвращает список публикаций в указанной категории.
         """
+        
         category_slug = self.kwargs['category_slug']
         category = get_object_or_404(Category, slug=category_slug,
                                      is_published=True)
@@ -210,6 +224,7 @@ class PostDetailView(DetailView):
     """
     Представление для отображения деталей публикации.
     """
+    
     model = Post
     template_name = 'blog/detail.html'
     pk_url_kwarg = 'post_id'
@@ -218,6 +233,7 @@ class PostDetailView(DetailView):
         """
         Добавляет форму комментария и список комментариев в контекст.
         """
+        
         context = super().get_context_data(**kwargs)
         context['form'] = CreateCommentForm()
         context['comments'] = (
@@ -230,6 +246,7 @@ class PostDetailView(DetailView):
         Возвращает публикацию, доступную текущему пользователю.
         Для авторизованных пользователей отображаются все их публикации.
         """
+        
         post = get_object_or_404(Post, pk=self.kwargs.get(self.pk_url_kwarg))
         if self.request.user == post.author:
             return post
