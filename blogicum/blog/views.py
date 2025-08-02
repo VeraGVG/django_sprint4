@@ -29,7 +29,7 @@ class PostDeleteView(PostsEditMixin, LoginRequiredMixin, DeleteView):
     pk_url_kwarg = 'post_id'
 
     def delete(self, request, *args, **kwargs):
-    
+
         """
         Проверяет права на удаление публикации.
         """
