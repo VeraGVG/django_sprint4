@@ -18,7 +18,6 @@ User = get_user_model()  # Получение модели пользовате�
 
 def index(request):
     """Отображение главной страницы с постами"""
-
     template = 'blog/index.html'
     posts = Post.objects.select_related(
         'category',
@@ -43,7 +42,6 @@ def index(request):
 
 def post_detail(request, id):
     """Отображение страницы конкретного поста"""
-
     template = 'blog/detail.html'
     username = request.user.username
     post = get_object_or_404(
@@ -103,7 +101,6 @@ def edit_profile(request, username):
     Страница изменения информации в профиле.
     Для изменения профиле необходимо быть залогиненым
     """
-
     template = 'blog/user.html'
     user = get_object_or_404(User, username=username)
     form = ChangeUserInfoForm(request.POST or None, instance=user)
@@ -116,7 +113,6 @@ def edit_profile(request, username):
 
 def profile(request, username):
     """Страница профиля"""
-
     req_username = request.user.username
     template = 'blog/profile.html'
     user = get_object_or_404(User, username=username)
@@ -147,7 +143,6 @@ def post(request, id=None):
     Страница создания или изменения поста.
     За определение цели отвечает наличие параметра id
     """
-
     user = request.user
     username = user.username
     # Если в запросе указан pk (т.е. получен запрос на редактирование объекта):
@@ -210,7 +205,6 @@ def edit_post(request, id):
 @login_required
 def delete_post(request, post_id):
     """Страница удаления поста"""
-
     # Получаем объект модели или выбрасываем 404 ошибку.
     username = request.user.username
     instance = get_object_or_404(Post.objects.select_related(
@@ -239,7 +233,6 @@ def delete_post(request, post_id):
 @login_required
 def comment(request, post_id):
     """Страница создания комментария"""
-
     post = get_object_or_404(Post.objects.select_related(
         'category',
         'location',
@@ -264,7 +257,6 @@ def edit_comment(request, post_id, comment_id):
     Для корректной работы необходимо передавать в контекст
     сам комментарий.
     """
-
     user = request.user
     username = user.username
     instance = get_object_or_404(Comment.objects.select_related(
@@ -286,7 +278,6 @@ def delete_comment(request, post_id, comment_id):
     Для корректной работы необходимо передавать в контекст
     сам комментарий.
     """
-
     user = request.user
     username = user.username
     instance = get_object_or_404(Comment.objects.select_related(
@@ -301,3 +292,4 @@ def delete_comment(request, post_id, comment_id):
         instance.delete()
         return redirect('blog:post_detail', id=post_id)
     return render(request, 'blog/comment.html', context)
+
