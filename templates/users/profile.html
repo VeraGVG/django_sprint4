@@ -12,7 +12,7 @@
 
     {% if request.user == user %}
 
-        <p><a href="{% url 'profile_edit' %}">Редактировать профиль\</a>\</p>
+        <p><a href="{% url 'profile_edit' user.username%}">Редактировать профиль\</a>\</p>
 
         <p><a href="{% url 'password_change' %}">Сменить пароль\</a>\</p>
 
@@ -35,5 +35,6 @@
         <p>Публикаций пока нет.\</p>
 
     {% endfor %}
+
 
 {% endblock %}
