@@ -73,8 +73,9 @@ class PostCreateView(PostsEditMixin, LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def get_success_url(self) -> str:
-        """Возвращает URL профиля автора после успешного создания публикации."""
-    
+        """
+        Возвращает URL профиля автора после успешного создания публикации.
+        """
         return reverse('blog:profile', args=[self.request.user.username])
 
 
@@ -89,7 +90,6 @@ class CommentCreateView(CommentEditMixin, LoginRequiredMixin, CreateView):
         Устанавливает текущего пользователя как автора комментария 
         и связывает комментарий с публикацией.
         """
-    
         form.instance.post = get_object_or_404(Post, pk=self.kwargs['post_id'])
         form.instance.author = self.request.user
         return super().form_valid(form)
@@ -129,7 +129,6 @@ class CommentUpdateView(CommentEditMixin, LoginRequiredMixin, UpdateView):
         """
         Проверяет права на редактирование комментария.
         """
-    
         comment = get_object_or_404(Comment, pk=self.kwargs[self.pk_url_kwarg])
         if self.request.user != comment.author:
             return redirect('blog:post_detail', post_id=self.kwargs['post_id'])
@@ -202,7 +201,6 @@ class PostDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         """Добавляет форму комментария и список комментариев в контекст."""
-    
         context = super().get_context_data(**kwargs)
         context['form'] = CreateCommentForm()
         context['comments'] = (
@@ -215,7 +213,6 @@ class PostDetailView(DetailView):
         Возвращает публикацию, доступную текущему пользователю.
         Для авторизованных пользователей отображаются все их публикации.
         """
-    
         post = get_object_or_404(Post, pk=self.kwargs.get(self.pk_url_kwarg))
         if self.request.user == post.author:
             return post
