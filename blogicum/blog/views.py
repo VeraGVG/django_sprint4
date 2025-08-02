@@ -68,25 +68,18 @@ class PostCreateView(PostsEditMixin, LoginRequiredMixin, CreateView):
     form_class = CreatePostForm
 
     def form_valid(self, form):
-        """
-        Устанавливает текущего пользователя как автора публикации.
-        """
-    
+        """Устанавливает текущего пользователя как автора публикации."""
         form.instance.author = self.request.user
         return super().form_valid(form)
 
     def get_success_url(self) -> str:
-        """
-        Возвращает URL профиля автора после успешного создания публикации.
-        """
+        """Возвращает URL профиля автора после успешного создания публикации."""
     
         return reverse('blog:profile', args=[self.request.user.username])
 
 
 class CommentCreateView(CommentEditMixin, LoginRequiredMixin, CreateView):
-    """
-    Представление для добавления комментария к публикации.
-    """
+    """Представление для добавления комментария к публикации."""
 
     model = Comment
     form_class = CreateCommentForm
@@ -113,9 +106,7 @@ class CommentDeleteView(CommentEditMixin, LoginRequiredMixin, DeleteView):
     pk_url_kwarg = 'comment_id'
 
     def delete(self, request, *args, **kwargs):
-        """
-        Проверяет права на удаление комментария.
-        """
+        """Проверяет права на удаление комментария."""
     
         comment = get_object_or_404(Comment, pk=self.kwargs[self.pk_url_kwarg])
         if self.request.user != comment.author:
@@ -158,10 +149,7 @@ class AuthorProfileListView(ListView):
     paginate_by = PAGINATED_BY
 
     def get_queryset(self):
-        """
-        Возвращает список публикаций автора.
-        """
-    
+        """Возвращает список публикаций автора."""
         author = get_object_or_404(User, username=self.kwargs['username'])
         posts = author.posts.all()
         if self.request.user != author:
@@ -169,10 +157,7 @@ class AuthorProfileListView(ListView):
         return posts
 
     def get_context_data(self, **kwargs):
-        """
-        Добавляет информацию о профиле автора в контекст.
-        """
-    
+        """Добавляет информацию о профиле автора в контекст."""
         context = super().get_context_data(**kwargs)
         context['profile'] = get_object_or_404(
             User, username=self.kwargs['username']
@@ -181,9 +166,7 @@ class AuthorProfileListView(ListView):
 
 
 class BlogIndexListView(ListView):
-    """
-    Представление для главной страницы блога с опубликованными публикациями.
-    """
+    """Представление для главной страницы блога с опубликованными публикациями."""
 
     model = Post
     template_name = 'blog/index.html'
@@ -194,9 +177,7 @@ class BlogIndexListView(ListView):
 
 
 class BlogCategoryListView(ListView):
-    """
-    Представление для отображения публикаций определённой категории.
-    """
+    """Представление для отображения публикаций определённой категории."""
 
     model = Post
     template_name = 'blog/category.html'
@@ -204,10 +185,7 @@ class BlogCategoryListView(ListView):
     paginate_by = PAGINATED_BY
 
     def get_queryset(self):
-        """
-        Возвращает список публикаций в указанной категории.
-        """
-    
+        """Возвращает список публикаций в указанной категории."""
         category_slug = self.kwargs['category_slug']
         category = get_object_or_404(Category, slug=category_slug,
                                      is_published=True)
@@ -216,18 +194,14 @@ class BlogCategoryListView(ListView):
 
 
 class PostDetailView(DetailView):
-    """
-    Представление для отображения деталей публикации.
-    """
+    """Представление для отображения деталей публикации."""
 
     model = Post
     template_name = 'blog/detail.html'
     pk_url_kwarg = 'post_id'
 
     def get_context_data(self, **kwargs):
-        """
-        Добавляет форму комментария и список комментариев в контекст.
-        """
+        """Добавляет форму комментария и список комментариев в контекст."""
     
         context = super().get_context_data(**kwargs)
         context['form'] = CreateCommentForm()
